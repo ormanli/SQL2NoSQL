@@ -42,6 +42,15 @@
 
     <build>
         <finalName>$\{project.artifactId}-$\{project.version}-r$\{buildNumber}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -109,9 +118,7 @@
     </build>
 
     <scm>
-        <connection>scm:git:git@github.com:ormanli/SQL2NoSQL.git</connection>
-        <developerConnection>scm:git:git@github.com:ormanli/SQL2NoSQL.git</developerConnection>
-        <url>scm:git:git@github.com:ormanli/SQL2NoSQL</url>
+        <connection>scm:git:https://github.com/ormanli/SQL2NoSQL.git</connection>
     </scm>
 
 </project>

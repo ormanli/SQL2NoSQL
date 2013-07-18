@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.serdar</groupId>
+    <groupId>com.ormanli</groupId>
     <artifactId>SQL2NoSQL</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -61,7 +61,7 @@
                         <manifest>
                             <mainClass>com.sql2nosql.App</mainClass>
                         </manifest>
-                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        <!--<addDefaultImplementationEntries>true</addDefaultImplementationEntries>-->
                     </archive>
                     <!--<source>${jdk.version}</source>-->
                     <!--<target>${jdk.version}</target>-->

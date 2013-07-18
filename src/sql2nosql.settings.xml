@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <setting>
+        <key>host</key>
+        <value>localhost</value>
+    </setting>
+    <setting>
+        <key>port</key>
+        <value>27017</value>
+    </setting>
+    <setting>
+        <key>dbname</key>
+        <value>testdb</value>
+    </setting>
+</settings>

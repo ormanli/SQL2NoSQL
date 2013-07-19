@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ormanli</groupId>
     <artifactId>SQL2NoSQL</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>SQL2NoSQL</name>
     <description>Experimental SQL to MongoDB connector.</description>
@@ -41,7 +41,7 @@
 
 
     <build>
-        <finalName>$\{project.artifactId}-$\{project.version}-r$\{buildNumber}</finalName>
+        <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -110,8 +110,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <shortRevisionLength>5</shortRevisionLength>
                 </configuration>
             </plugin>
         </plugins>

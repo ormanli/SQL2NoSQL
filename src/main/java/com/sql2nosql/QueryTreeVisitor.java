@@ -11,12 +11,10 @@ package com.sql2nosql;
 
 import com.akiban.sql.StandardException;
 import com.akiban.sql.parser.*;
-import com.sql2nosql.node.NodeAction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class QueryTreeVisitor implements Visitor, Constants {
 
@@ -57,11 +55,6 @@ public class QueryTreeVisitor implements Visitor, Constants {
     public Visitable visit(Visitable visitable) throws StandardException {
         QueryTreeNode node = (QueryTreeNode) visitable;
 
-        List nodeList = NodeLoader.getNodes();
-        for (int i = 0; i < nodeList.size(); i++) {
-            NodeAction action = (NodeAction) nodeList.get(i);
-            action.action(node);
-        }
         if (node.getNodeType() == NodeTypes.COLUMN_REFERENCE) {
             ColumnReference ref = (ColumnReference) node;
 

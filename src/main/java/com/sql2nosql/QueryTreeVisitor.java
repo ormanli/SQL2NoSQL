@@ -12,6 +12,7 @@ package com.sql2nosql;
 
 import com.akiban.sql.StandardException;
 import com.akiban.sql.parser.*;
+import com.sql2nosql.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,14 +27,6 @@ public class QueryTreeVisitor implements Visitor, Constants {
 
     private static String qualify(String s) {
         return (s != null) ? s + "." : "";
-    }
-
-    public ArrayList<String> getAaa() {
-        return aaa;
-    }
-
-    public void setAaa(ArrayList<String> aaa) {
-        this.aaa = aaa;
     }
 
     public QueryTreeVisitor(ArrayList<String> aaa) {

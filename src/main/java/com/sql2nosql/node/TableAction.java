@@ -14,7 +14,7 @@ import com.akiban.sql.parser.FromBaseTable;
 import com.akiban.sql.parser.NodeTypes;
 import com.akiban.sql.parser.QueryTreeNode;
 import com.google.common.collect.HashBiMap;
-import com.sql2nosql.Constants;
+import com.sql2nosql.util.Constants;
 
 import java.util.HashMap;
 

@@ -17,25 +17,28 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import com.sql2nosql.util.Constants;
+
 public class NodeLoader implements Constants {
 
-    //TODO optimise node list. every call it generates list again.
+	private static List queue = new ArrayList();
+	
     public static List getNodes() {
-
-        Class[] nodes = new Class[0];
-        List queue = new ArrayList();
-        try {
-            nodes = getClasses(ActionPackage);
-            for (int i = 0; i < nodes.length; i++) {
-                if (!nodes[i].isInterface())
-                    queue.add(Class.forName(nodes[i].getName()).newInstance());
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return queue;
+        if (queue.size()==0) {
+			Class[] nodes = new Class[0];
+			try {
+				nodes = getClasses(ActionPackage);
+				for (int i = 0; i < nodes.length; i++) {
+					if (!nodes[i].isInterface())
+						queue.add(Class.forName(nodes[i].getName()).newInstance());
+				}
+			} catch (Exception e) {
+				System.err.println("Error adding nodes");
+				e.printStackTrace();
+			}
+		}
+        
+		return queue;
     }
 
 

@@ -8,21 +8,24 @@
  * Contributors:
  *     Serdar Ormanlı - initial API and implementation
  ******************************************************************************/
-package com.sql2nosql;
+package com.sql2nosql.util;
 
 import java.io.File;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
-import com.sql2nosql.util.Settings;
-
 public class SettingsImporter {
+	
+	private static Settings appSettings;
 
 	public static Settings importSettings(String path) throws Exception {
-		File file = new File(path);
-		JAXBContext jaxbContext = JAXBContext.newInstance(Settings.class);
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		return (Settings) jaxbUnmarshaller.unmarshal(file);
+		if (appSettings == null) {
+			File file = new File(path);
+			JAXBContext jaxbContext = JAXBContext.newInstance(Settings.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			appSettings = (Settings) jaxbUnmarshaller.unmarshal(file);
+		}
+		return appSettings;
 	}
 }

@@ -13,7 +13,9 @@ package com.sql2nosql;
 import com.akiban.sql.parser.SQLParser;
 import com.akiban.sql.parser.StatementNode;
 import com.mongodb.*;
+import com.sql2nosql.util.Constants;
 import com.sql2nosql.util.Settings;
+import com.sql2nosql.util.SettingsImporter;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

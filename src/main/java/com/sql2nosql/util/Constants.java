@@ -8,7 +8,7 @@
  * Contributors:
  *     Serdar Ormanlı - initial API and implementation
  ******************************************************************************/
-package com.sql2nosql;
+package com.sql2nosql.util;
 
 public interface Constants {
     public static String COLUMN = "COLUMN";

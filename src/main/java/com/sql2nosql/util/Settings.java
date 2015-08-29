@@ -15,7 +15,6 @@
 // Generated on: 2014.01.21 at 09:03:00 PM EET 
 //
 
-
 package com.sql2nosql.util;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -23,11 +22,13 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * <p>
+ * Java class for anonymous complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -46,88 +47,75 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "host",
-    "port",
-    "dbname"
-})
+@XmlType(name = "", propOrder = { "host", "port", "dbname" })
 @XmlRootElement(name = "settings")
 public class Settings {
 
-    protected String host;
-    protected Integer port;
-    protected String dbname;
+	protected String host;
+	protected Integer port;
+	protected String dbname;
 
-    /**
-     * Gets the value of the host property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHost() {
-        return host;
-    }
+	/**
+	 * Gets the value of the host property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getHost() {
+		return host;
+	}
 
-    /**
-     * Sets the value of the host property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHost(String value) {
-        this.host = value;
-    }
+	/**
+	 * Sets the value of the host property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setHost(String value) {
+		this.host = value;
+	}
 
-    /**
-     * Gets the value of the port property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getPort() {
-        return port;
-    }
+	/**
+	 * Gets the value of the port property.
+	 * 
+	 * @return possible object is {@link Integer }
+	 * 
+	 */
+	public Integer getPort() {
+		return port;
+	}
 
-    /**
-     * Sets the value of the port property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setPort(Integer value) {
-        this.port = value;
-    }
+	/**
+	 * Sets the value of the port property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link Integer }
+	 * 
+	 */
+	public void setPort(Integer value) {
+		this.port = value;
+	}
 
-    /**
-     * Gets the value of the dbname property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDbname() {
-        return dbname;
-    }
+	/**
+	 * Gets the value of the dbname property.
+	 * 
+	 * @return possible object is {@link String }
+	 * 
+	 */
+	public String getDbname() {
+		return dbname;
+	}
 
-    /**
-     * Sets the value of the dbname property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDbname(String value) {
-        this.dbname = value;
-    }
+	/**
+	 * Sets the value of the dbname property.
+	 * 
+	 * @param value
+	 *            allowed object is {@link String }
+	 * 
+	 */
+	public void setDbname(String value) {
+		this.dbname = value;
+	}
 
 }

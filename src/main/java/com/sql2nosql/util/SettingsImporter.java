@@ -16,7 +16,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
 public class SettingsImporter {
-	
+
 	private static Settings appSettings;
 
 	public static Settings importSettings(String path) throws Exception {

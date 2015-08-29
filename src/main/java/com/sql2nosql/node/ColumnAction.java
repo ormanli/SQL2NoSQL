@@ -19,23 +19,23 @@ import com.sql2nosql.util.Constants;
 import java.util.HashMap;
 
 public class ColumnAction implements NodeAction, Constants {
-    @Override
-    public void action(QueryTreeNode node, HashMap<String, Object> list) {
+	@Override
+	public void action(QueryTreeNode node, HashMap<String, Object> list) {
 
-        if (node.getNodeType() == NodeTypes.COLUMN_REFERENCE) {
+		if (node.getNodeType() == NodeTypes.COLUMN_REFERENCE) {
 
-            ColumnReference ref = (ColumnReference) node;
+			ColumnReference ref = (ColumnReference) node;
 
-            if (list.containsKey(COLUMN)) {
-                HashBiMap<String, String> subList = (HashBiMap) list.get(COLUMN);
-                subList.put(ref.getColumnName().toUpperCase(), ref.getTableName().toUpperCase());
-                list.put(COLUMN, subList);
-            } else {
-                HashBiMap<String, String> subList = HashBiMap.create();
-                subList.put(ref.getColumnName().toUpperCase(), ref.getTableName().toUpperCase());
-                list.put(COLUMN, subList);
-            }
+			if (list.containsKey(COLUMN)) {
+				HashBiMap<String, String> subList = (HashBiMap) list.get(COLUMN);
+				subList.put(ref.getColumnName().toUpperCase(), ref.getTableName().toUpperCase());
+				list.put(COLUMN, subList);
+			} else {
+				HashBiMap<String, String> subList = HashBiMap.create();
+				subList.put(ref.getColumnName().toUpperCase(), ref.getTableName().toUpperCase());
+				list.put(COLUMN, subList);
+			}
 
-        }
-    }
+		}
+	}
 }

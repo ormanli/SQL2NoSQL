@@ -11,8 +11,8 @@
 package com.sql2nosql.util;
 
 public interface Constants {
-    public static String COLUMN = "COLUMN";
-    public String TABLE = "TABLE";
-    public String WHERE = "WHERE";
-    public String ActionPackage = "com.sql2nosql.node";
+	public static String COLUMN = "COLUMN";
+	public String TABLE = "TABLE";
+	public String WHERE = "WHERE";
+	public String NODE_PACKAGE = "com.sql2nosql.node";
 }

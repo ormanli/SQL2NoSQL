@@ -16,6 +16,6 @@ import java.util.HashMap;
 
 public interface NodeAction {
 
-    void action(QueryTreeNode node, HashMap<String, Object> list);
+	void action(QueryTreeNode node, HashMap<String, Object> list);
 
 }

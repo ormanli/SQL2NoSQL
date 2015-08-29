@@ -10,16 +10,22 @@
  ******************************************************************************/
 package com.sql2nosql;
 
-import com.akiban.sql.parser.SQLParser;
-import com.akiban.sql.parser.StatementNode;
-import com.mongodb.*;
-import com.sql2nosql.util.Constants;
-import com.sql2nosql.util.Settings;
-import com.sql2nosql.util.SettingsImporter;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.bson.Document;
+
+import com.akiban.sql.parser.SQLParser;
+import com.akiban.sql.parser.StatementNode;
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.sql2nosql.util.Constants;
+import com.sql2nosql.util.Settings;
+import com.sql2nosql.util.SettingsImporter;
 
 /**
  * @author ormanli
@@ -32,7 +38,7 @@ public class SQLExecuter implements Constants {
 
 		MongoClient mongo = new MongoClient(settings.getHost(), settings.getPort().intValue());
 
-		DB db = mongo.getDB(settings.getDbname());
+		MongoDatabase db = mongo.getDatabase(settings.getDbname());
 
 		HashMap<String, LinkedHashMap<String, Object>> list = new HashMap<String, LinkedHashMap<String, Object>>();
 		SQLParser parser = new SQLParser();
@@ -48,7 +54,7 @@ public class SQLExecuter implements Constants {
 			Object object = entry.getValue();
 
 		}
-		DBCollection table = db.getCollection(string.toLowerCase());
+		MongoCollection<Document> table = db.getCollection(string.toLowerCase());
 
 		LinkedHashMap<String, Object> whereList = list.get(WHERE);
 		String string1 = null;
@@ -63,10 +69,10 @@ public class SQLExecuter implements Constants {
 
 		searchQuery.put(string1.toLowerCase(), object.toString());
 
-		DBCursor cursor = table.find(searchQuery);
+		FindIterable<Document> cursor = table.find(searchQuery);
 
-		while (cursor.hasNext()) {
-			System.out.println(cursor.next());
+		for (Document document : cursor) {
+			System.out.println(document.toJson());
 		}
 
 		return null;

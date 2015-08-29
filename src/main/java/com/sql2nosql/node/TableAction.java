@@ -19,22 +19,22 @@ import com.sql2nosql.util.Constants;
 import java.util.HashMap;
 
 public class TableAction implements NodeAction, Constants {
-    @Override
-    public void action(QueryTreeNode node, HashMap<String, Object> list) {
+	@Override
+	public void action(QueryTreeNode node, HashMap<String, Object> list) {
 
-        if (node.getNodeType() == NodeTypes.FROM_BASE_TABLE) {
+		if (node.getNodeType() == NodeTypes.FROM_BASE_TABLE) {
 
-            FromBaseTable ref = (FromBaseTable) node;
+			FromBaseTable ref = (FromBaseTable) node;
 
-            if (list.containsKey(TABLE)) {
-                HashBiMap<String, String> subList = (HashBiMap) list.get(TABLE);
-                subList.forcePut(ref.getOrigTableName().toString().toUpperCase(), ref.getExposedName().toUpperCase());
-                list.put(TABLE, subList);
-            } else {
-                HashBiMap<String, String> subList = HashBiMap.create();
-                subList.forcePut(ref.getOrigTableName().toString().toUpperCase(), ref.getExposedName().toUpperCase());
-                list.put(TABLE, subList);
-            }
-        }
-    }
+			if (list.containsKey(TABLE)) {
+				HashBiMap<String, String> subList = (HashBiMap) list.get(TABLE);
+				subList.forcePut(ref.getOrigTableName().toString().toUpperCase(), ref.getExposedName().toUpperCase());
+				list.put(TABLE, subList);
+			} else {
+				HashBiMap<String, String> subList = HashBiMap.create();
+				subList.forcePut(ref.getOrigTableName().toString().toUpperCase(), ref.getExposedName().toUpperCase());
+				list.put(TABLE, subList);
+			}
+		}
+	}
 }

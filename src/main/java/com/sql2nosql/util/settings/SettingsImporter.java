@@ -8,7 +8,7 @@
  * Contributors:
  *     Serdar Ormanlı - initial API and implementation
  ******************************************************************************/
-package com.sql2nosql.util;
+package com.sql2nosql.util.settings;
 
 import java.io.File;
 

@@ -15,7 +15,7 @@
 // Generated on: 2014.01.21 at 09:03:00 PM EET 
 //
 
-package com.sql2nosql.util;
+package com.sql2nosql.util.settings;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

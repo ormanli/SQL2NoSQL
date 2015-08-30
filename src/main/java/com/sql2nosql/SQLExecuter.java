@@ -10,71 +10,43 @@
  ******************************************************************************/
 package com.sql2nosql;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
 
 import org.bson.Document;
 
-import com.akiban.sql.parser.SQLParser;
-import com.akiban.sql.parser.StatementNode;
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.sql2nosql.util.Constants;
-import com.sql2nosql.util.Settings;
-import com.sql2nosql.util.SettingsImporter;
+import com.sql2nosql.util.settings.Settings;
+import com.sql2nosql.visitor.SQLVisitor;
 
 /**
  * @author ormanli
  */
 public class SQLExecuter implements Constants {
+	private MongoClient mongo;
+	private MongoDatabase db;
 
-	public static String execute(String SQL) throws Exception {
+	public SQLExecuter(Settings settings) {
+		this(settings.getHost(), settings.getPort(), settings.getDbname());
+	}
 
-		Settings settings = SettingsImporter.importSettings("sql2nosql.settings.xml");
+	public SQLExecuter(String host, Integer port, String dbName) {
+		mongo = new MongoClient(host, port);
+		db = mongo.getDatabase(dbName);
+	}
 
-		MongoClient mongo = new MongoClient(settings.getHost(), settings.getPort().intValue());
+	public FindIterable<Document> execute(String SQL) throws Exception {
+		Statement statement = CCJSqlParserUtil.parse(SQL);
 
-		MongoDatabase db = mongo.getDatabase(settings.getDbname());
+		SQLVisitor visitor = new SQLVisitor();
+		statement.accept(visitor);
 
-		HashMap<String, LinkedHashMap<String, Object>> list = new HashMap<String, LinkedHashMap<String, Object>>();
-		SQLParser parser = new SQLParser();
-		StatementNode node = parser.parseStatement(SQL);
+		MongoCollection<Document> collection = db.getCollection(visitor.getTable());
 
-		QueryTreeVisitor fdg = new QueryTreeVisitor(list);
-		node.accept(fdg);
-
-		String string = null;
-		LinkedHashMap<String, Object> tableList = list.get(TABLE);
-		for (Map.Entry<String, Object> entry : tableList.entrySet()) {
-			string = entry.getKey();
-			Object object = entry.getValue();
-
-		}
-		MongoCollection<Document> table = db.getCollection(string.toLowerCase());
-
-		LinkedHashMap<String, Object> whereList = list.get(WHERE);
-		String string1 = null;
-		Object object = null;
-		for (Map.Entry<String, Object> entry : whereList.entrySet()) {
-			string1 = entry.getKey();
-			object = entry.getValue();
-
-		}
-
-		BasicDBObject searchQuery = new BasicDBObject();
-
-		searchQuery.put(string1.toLowerCase(), object.toString());
-
-		FindIterable<Document> cursor = table.find(searchQuery);
-
-		for (Document document : cursor) {
-			System.out.println(document.toJson());
-		}
-
-		return null;
+		return collection.find(visitor.getWhere().getFilter());
 	}
 }

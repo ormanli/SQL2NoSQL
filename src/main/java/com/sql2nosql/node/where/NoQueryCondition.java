@@ -3,12 +3,14 @@ package com.sql2nosql.node.where;
 import org.bson.conversions.Bson;
 
 public class NoQueryCondition {
+	private String tableName;
 	private String columnName;
 	private NoQueryConditionOperator operator;
 	private Object value;
 	private NoQueryConditionChain chain;
 
-	public NoQueryCondition(NoQueryConditionChain chain, String columnName, NoQueryConditionOperator operator, Object value) {
+	public NoQueryCondition(NoQueryConditionChain chain, String tableName, String columnName, NoQueryConditionOperator operator, Object value) {
+		this.tableName = tableName;
 		this.columnName = columnName;
 		this.operator = operator;
 		this.value = value;
@@ -16,6 +18,14 @@ public class NoQueryCondition {
 	}
 
 	public NoQueryCondition() {
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
 	}
 
 	public String getColumnName() {
@@ -52,6 +62,11 @@ public class NoQueryCondition {
 
 	public Bson getBson() {
 		return this.operator.getClause(this.columnName, this.value);
+	}
+
+	@Override
+	public String toString() {
+		return chain != null && chain != NoQueryConditionChain.NOOP ? chain.toString() + " " : "" + tableName + "." + columnName + " " + operator + " " + value;
 	}
 
 }

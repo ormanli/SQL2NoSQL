@@ -40,4 +40,9 @@ public class NoQueryWhere {
 
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return conditions.toString();
+	}
 }

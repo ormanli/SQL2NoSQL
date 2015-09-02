@@ -10,15 +10,21 @@
  ******************************************************************************/
 package com.sql2nosql;
 
+import java.util.ArrayList;
+
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 
 import org.bson.Document;
 
+import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.sql2nosql.node.NoQuery;
+import com.sql2nosql.node.column.NoQueryColumn;
+import com.sql2nosql.node.where.NoQueryWhere;
 import com.sql2nosql.util.Constants;
 import com.sql2nosql.util.settings.Settings;
 import com.sql2nosql.visitor.SQLVisitor;
@@ -45,8 +51,16 @@ public class SQLExecuter implements Constants {
 		SQLVisitor visitor = new SQLVisitor();
 		statement.accept(visitor);
 
-		MongoCollection<Document> collection = db.getCollection(visitor.getTable());
+		NoQuery noQuery = visitor.getNoQuery();
 
-		return collection.find(visitor.getWhere().getFilter());
+		ArrayList<String> tables = Lists.newArrayList(noQuery.getTables().keySet());
+
+		MongoCollection<Document> collection = db.getCollection(tables.get(0));
+
+		NoQueryWhere where = noQuery.getWhere();
+
+		NoQueryColumn columns = noQuery.getColumns();
+
+		return collection.find(where.getFilter()).projection(columns.getColumns(tables.get(0)));
 	}
 }

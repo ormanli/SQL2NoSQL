@@ -40,4 +40,13 @@ public class ParserTest {
 
 		result.forEach(printBlock);
 	}
+
+	@Test
+	public void selectColumnTest() throws Exception {
+		SQLExecuter executer = new SQLExecuter("localhost", 27017, "mydb");
+
+		FindIterable<Document> result = executer.execute("SELECT A.col3 FROM deneme A WHERE A.col1=5");
+
+		result.forEach(printBlock);
+	}
 }

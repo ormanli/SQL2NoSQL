@@ -10,6 +10,7 @@ Currently only supports queries like
 
 ```
 SELECT * FROM TABLE WHERE COLUMN=1
+SELECT A.COLUMN2 FROM TABLE A WHERE A.COLUMN1=1
 ```
 
 
@@ -17,4 +18,6 @@ TODO List
 -----------------------------------------
 
 - [x] Support basic query
-- [ ] Add column support
+- [x] Add column support
+- [x] Add table alias
+- [ ] Add other data types to where condition

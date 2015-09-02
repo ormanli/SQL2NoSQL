@@ -66,10 +66,14 @@ import net.sf.jsqlparser.statement.drop.Drop;
 import net.sf.jsqlparser.statement.execute.Execute;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.replace.Replace;
+import net.sf.jsqlparser.statement.select.AllColumns;
+import net.sf.jsqlparser.statement.select.AllTableColumns;
 import net.sf.jsqlparser.statement.select.FromItemVisitor;
 import net.sf.jsqlparser.statement.select.LateralSubSelect;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+import net.sf.jsqlparser.statement.select.SelectItemVisitor;
 import net.sf.jsqlparser.statement.select.SelectVisitor;
 import net.sf.jsqlparser.statement.select.SetOperationList;
 import net.sf.jsqlparser.statement.select.SubJoin;
@@ -79,23 +83,26 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Lists;
+import com.sql2nosql.node.NoQuery;
+import com.sql2nosql.node.column.NoQueryColumn;
 import com.sql2nosql.node.where.NoQueryCondition;
 import com.sql2nosql.node.where.NoQueryConditionChain;
 import com.sql2nosql.node.where.NoQueryConditionOperator;
 import com.sql2nosql.node.where.NoQueryWhere;
 
 public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
-		StatementVisitor, FromItemVisitor {
+		StatementVisitor, FromItemVisitor, SelectItemVisitor {
 
-	private String table;
+	private NoQueryColumn columns = new NoQueryColumn();
+	private BiMap<String, String> tables = HashBiMap.<String, String> create();
 	private NoQueryWhere where = new NoQueryWhere();
+	private boolean isSelect = true;
 
-	public String getTable() {
-		return table;
-	}
-
-	public NoQueryWhere getWhere() {
-		return where;
+	public NoQuery getNoQuery() {
+		return new NoQuery(columns, tables, where);
 	}
 
 	@Override
@@ -171,6 +178,10 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 	@Override
 	public void visit(PlainSelect plainSelect) {
 		plainSelect.getFromItem().accept(this);
+
+		plainSelect.getSelectItems().forEach(item -> item.accept(this));
+
+		isSelect = false;
 
 		if (plainSelect.getWhere() != null) {
 			plainSelect.getWhere().accept(this);
@@ -342,10 +353,15 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(Column tableColumn) {
-		NoQueryCondition condition = new NoQueryCondition();
-		condition.setColumnName(tableColumn.getColumnName());
+		if (isSelect) {
+			columns.addColumn(tables.inverse().get(tableColumn.getTable().getName()), tableColumn.getColumnName());
+		} else {
+			NoQueryCondition condition = new NoQueryCondition();
+			condition.setTableName(tables.inverse().get(tableColumn.getTable().getName()));
+			condition.setColumnName(tableColumn.getColumnName());
 
-		where.addCondition(condition);
+			where.addCondition(condition);
+		}
 	}
 
 	@Override
@@ -470,7 +486,7 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(Table tableName) {
-		table = tableName.getName();
+		tables.put(tableName.getName(), tableName.getAlias() != null ? tableName.getAlias().getName() : tableName.getName());
 	}
 
 	@Override
@@ -486,6 +502,21 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 	@Override
 	public void visit(ValuesList valuesList) {
 
+	}
+
+	@Override
+	public void visit(AllColumns allColumns) {
+		columns.addColumn(Lists.newArrayList(tables.keySet()).get(0), "*");
+	}
+
+	@Override
+	public void visit(AllTableColumns allTableColumns) {
+		columns.addColumn(tables.inverse().get(allTableColumns.getTable().getName()), "*");
+	}
+
+	@Override
+	public void visit(SelectExpressionItem selectExpressionItem) {
+		selectExpressionItem.getExpression().accept(this);
 	}
 
 }

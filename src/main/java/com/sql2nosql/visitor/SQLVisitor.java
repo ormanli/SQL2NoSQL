@@ -1,8 +1,11 @@
 package com.sql2nosql.visitor;
 
+import java.util.Date;
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
+import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.CaseExpression;
 import net.sf.jsqlparser.expression.CastExpression;
 import net.sf.jsqlparser.expression.DateValue;
@@ -225,7 +228,8 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(DoubleValue doubleValue) {
-
+		NoQueryCondition condition = where.peekCondition();
+		condition.setValue(doubleValue.getValue());
 	}
 
 	@Override
@@ -236,17 +240,20 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(DateValue dateValue) {
-
+		NoQueryCondition condition = where.peekCondition();
+		condition.setValue(new Date(dateValue.getValue().getTime()));
 	}
 
 	@Override
 	public void visit(TimeValue timeValue) {
-
+		NoQueryCondition condition = where.peekCondition();
+		condition.setValue(timeValue.getValue());
 	}
 
 	@Override
 	public void visit(TimestampValue timestampValue) {
-
+		NoQueryCondition condition = where.peekCondition();
+		condition.setValue(timestampValue.getValue());
 	}
 
 	@Override
@@ -256,7 +263,8 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(StringValue stringValue) {
-
+		NoQueryCondition condition = where.peekCondition();
+		condition.setValue(stringValue.getValue());
 	}
 
 	@Override
@@ -279,22 +287,28 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	}
 
-	@Override
-	public void visit(AndExpression andExpression) {
-		andExpression.getLeftExpression().accept(this);
-		andExpression.getRightExpression().accept(this);
+	private void visitExpression(BinaryExpression expression, NoQueryConditionChain chain, NoQueryConditionOperator operator) {
+		expression.getLeftExpression().accept(this);
+		expression.getRightExpression().accept(this);
 
 		NoQueryCondition condition = where.peekCondition();
-		condition.setChain(NoQueryConditionChain.AND);
+		if (chain != null) {
+			condition.setChain(chain);
+		}
+
+		if (operator != null) {
+			condition.setOperator(operator);
+		}
+	}
+
+	@Override
+	public void visit(AndExpression andExpression) {
+		visitExpression(andExpression, NoQueryConditionChain.AND, null);
 	}
 
 	@Override
 	public void visit(OrExpression orExpression) {
-		orExpression.getLeftExpression().accept(this);
-		orExpression.getRightExpression().accept(this);
-
-		NoQueryCondition condition = where.peekCondition();
-		condition.setChain(NoQueryConditionChain.OR);
+		visitExpression(orExpression, NoQueryConditionChain.OR, null);
 	}
 
 	@Override
@@ -304,21 +318,17 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(EqualsTo equalsTo) {
-		equalsTo.getLeftExpression().accept(this);
-		equalsTo.getRightExpression().accept(this);
-
-		NoQueryCondition condition = where.peekCondition();
-		condition.setOperator(NoQueryConditionOperator.EQUALS);
+		visitExpression(equalsTo, null, NoQueryConditionOperator.EQUALS);
 	}
 
 	@Override
 	public void visit(GreaterThan greaterThan) {
-
+		visitExpression(greaterThan, null, NoQueryConditionOperator.GREATER_THAN);
 	}
 
 	@Override
 	public void visit(GreaterThanEquals greaterThanEquals) {
-
+		visitExpression(greaterThanEquals, null, NoQueryConditionOperator.GREATER_THAN_EQUALS);
 	}
 
 	@Override
@@ -338,17 +348,17 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(MinorThan minorThan) {
-
+		visitExpression(minorThan, null, NoQueryConditionOperator.LESS_THAN);
 	}
 
 	@Override
 	public void visit(MinorThanEquals minorThanEquals) {
-
+		visitExpression(minorThanEquals, null, NoQueryConditionOperator.LESS_THAN_EQUALS);
 	}
 
 	@Override
 	public void visit(NotEqualsTo notEqualsTo) {
-
+		visitExpression(notEqualsTo, null, NoQueryConditionOperator.NOT_EQUALS);
 	}
 
 	@Override

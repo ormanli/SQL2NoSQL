@@ -45,7 +45,16 @@ public class ParserTest {
 	public void selectColumnTest() throws Exception {
 		SQLExecuter executer = new SQLExecuter("localhost", 27017, "mydb");
 
-		FindIterable<Document> result = executer.execute("SELECT A.col3 FROM deneme A WHERE A.col1=5");
+		FindIterable<Document> result = executer.execute("SELECT A.col3,A.col2 FROM deneme A WHERE A.col1=5");
+
+		result.forEach(printBlock);
+	}
+
+	@Test
+	public void selectGreaterThanTest() throws Exception {
+		SQLExecuter executer = new SQLExecuter("localhost", 27017, "mydb");
+
+		FindIterable<Document> result = executer.execute("SELECT A.* FROM deneme A WHERE A.col2>3");
 
 		result.forEach(printBlock);
 	}

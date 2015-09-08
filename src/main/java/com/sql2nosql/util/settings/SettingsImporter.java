@@ -13,19 +13,26 @@ package com.sql2nosql.util.settings;
 import java.io.File;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 public class SettingsImporter {
 
-	private static Settings appSettings;
+	private final String path;
+	private Settings appSettings;
 
-	public static Settings importSettings(String path) throws Exception {
+	public SettingsImporter(String path) {
+		this.path = path;
+	}
+
+	public Settings importSettings() throws JAXBException {
 		if (appSettings == null) {
 			File file = new File(path);
 			JAXBContext jaxbContext = JAXBContext.newInstance(Settings.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			appSettings = (Settings) jaxbUnmarshaller.unmarshal(file);
 		}
+
 		return appSettings;
 	}
 }

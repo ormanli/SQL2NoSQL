@@ -12,6 +12,7 @@ package com.sql2nosql;
 
 import java.util.ArrayList;
 
+import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.statement.Statement;
 
@@ -25,16 +26,15 @@ import com.mongodb.client.MongoDatabase;
 import com.sql2nosql.node.NoQuery;
 import com.sql2nosql.node.column.NoQueryColumn;
 import com.sql2nosql.node.where.NoQueryWhere;
-import com.sql2nosql.util.Constants;
 import com.sql2nosql.util.settings.Settings;
 import com.sql2nosql.visitor.SQLVisitor;
 
 /**
  * @author ormanli
  */
-public class SQLExecuter implements Constants {
-	private MongoClient mongo;
-	private MongoDatabase db;
+public class SQLExecuter {
+	private final MongoClient mongo;
+	private final MongoDatabase db;
 
 	public SQLExecuter(Settings settings) {
 		this(settings.getHost(), settings.getPort(), settings.getDbname());
@@ -45,7 +45,7 @@ public class SQLExecuter implements Constants {
 		db = mongo.getDatabase(dbName);
 	}
 
-	public FindIterable<Document> execute(String SQL) throws Exception {
+	public FindIterable<Document> execute(String SQL) throws JSQLParserException {
 		Statement statement = CCJSqlParserUtil.parse(SQL);
 
 		SQLVisitor visitor = new SQLVisitor();

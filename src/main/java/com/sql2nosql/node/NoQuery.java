@@ -1,30 +1,33 @@
 package com.sql2nosql.node;
 
-import com.google.common.collect.BiMap;
-import com.sql2nosql.node.column.NoQueryColumn;
-import com.sql2nosql.node.where.NoQueryWhere;
+import com.sql2nosql.node.column.QueryColumn;
+import com.sql2nosql.node.table.QueryTable;
+import com.sql2nosql.node.where.QueryWhere;
 
-public class NoQuery {
+public class NoQuery implements Query {
 
-	private final NoQueryColumn columns;
-	private final BiMap<String, String> tables;
-	private final NoQueryWhere where;
+	private final QueryColumn columns;
+	private final QueryTable tables;
+	private final QueryWhere where;
 
-	public NoQuery(NoQueryColumn columns, BiMap<String, String> tables, NoQueryWhere where) {
+	public NoQuery(QueryColumn columns, QueryTable tables, QueryWhere where) {
 		this.columns = columns;
 		this.tables = tables;
 		this.where = where;
 	}
 
-	public NoQueryColumn getColumns() {
+	@Override
+	public QueryColumn getColumns() {
 		return columns;
 	}
 
-	public BiMap<String, String> getTables() {
+	@Override
+	public QueryTable getTables() {
 		return tables;
 	}
 
-	public NoQueryWhere getWhere() {
+	@Override
+	public QueryWhere getWhere() {
 		return where;
 	}
 

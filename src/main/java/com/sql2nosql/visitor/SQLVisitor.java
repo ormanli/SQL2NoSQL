@@ -86,11 +86,11 @@ import net.sf.jsqlparser.statement.select.WithItem;
 import net.sf.jsqlparser.statement.truncate.Truncate;
 import net.sf.jsqlparser.statement.update.Update;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.google.common.collect.Lists;
 import com.sql2nosql.node.NoQuery;
+import com.sql2nosql.node.Query;
 import com.sql2nosql.node.column.NoQueryColumn;
+import com.sql2nosql.node.table.NoQueryTable;
 import com.sql2nosql.node.where.NoQueryCondition;
 import com.sql2nosql.node.where.NoQueryConditionChain;
 import com.sql2nosql.node.where.NoQueryConditionOperator;
@@ -100,11 +100,11 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 		StatementVisitor, FromItemVisitor, SelectItemVisitor {
 
 	private NoQueryColumn columns = new NoQueryColumn();
-	private BiMap<String, String> tables = HashBiMap.<String, String> create();
+	private NoQueryTable tables = new NoQueryTable();
 	private NoQueryWhere where = new NoQueryWhere();
 	private boolean isSelect = true;
 
-	public NoQuery getNoQuery() {
+	public Query getNoQuery() {
 		return new NoQuery(columns, tables, where);
 	}
 
@@ -364,10 +364,10 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 	@Override
 	public void visit(Column tableColumn) {
 		if (isSelect) {
-			columns.addColumn(tables.inverse().get(tableColumn.getTable().getName()), tableColumn.getColumnName());
+			columns.addColumn(tables.getTableName(tableColumn.getTable().getName()), tableColumn.getColumnName());
 		} else {
 			NoQueryCondition condition = new NoQueryCondition();
-			condition.setTableName(tables.inverse().get(tableColumn.getTable().getName()));
+			condition.setTableName(tables.getTableName(tableColumn.getTable().getName()));
 			condition.setColumnName(tableColumn.getColumnName());
 
 			where.addCondition(condition);
@@ -496,7 +496,7 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(Table tableName) {
-		tables.put(tableName.getName(), tableName.getAlias() != null ? tableName.getAlias().getName() : tableName.getName());
+		tables.addTable(tableName.getName(), tableName.getAlias() != null ? tableName.getAlias().getName() : tableName.getName());
 	}
 
 	@Override
@@ -516,12 +516,12 @@ public class SQLVisitor implements ExpressionVisitor, SelectVisitor,
 
 	@Override
 	public void visit(AllColumns allColumns) {
-		columns.addColumn(Lists.newArrayList(tables.keySet()).get(0), "*");
+		columns.addColumn(Lists.newArrayList(tables.getTableNames()).get(0), "*");
 	}
 
 	@Override
 	public void visit(AllTableColumns allTableColumns) {
-		columns.addColumn(tables.inverse().get(allTableColumns.getTable().getName()), "*");
+		columns.addColumn(tables.getAlias(allTableColumns.getTable().getName()), "*");
 	}
 
 	@Override

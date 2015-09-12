@@ -6,17 +6,20 @@ import org.bson.BsonDocument;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.conversions.Bson;
 
-public class NoQueryWhere {
+public class NoQueryWhere implements QueryWhere {
 	private final Stack<NoQueryCondition> conditions = new Stack<NoQueryCondition>();
 
+	@Override
 	public void addCondition(NoQueryCondition condition) {
 		conditions.push(condition);
 	}
 
+	@Override
 	public NoQueryCondition peekCondition() {
 		return conditions.peek();
 	}
 
+	@Override
 	public Bson getFilter() {
 		Bson result;
 

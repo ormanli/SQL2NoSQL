@@ -2,7 +2,7 @@ package com.sql2nosql.node.where;
 
 import org.bson.conversions.Bson;
 
-public class NoQueryCondition {
+public class NoQueryCondition implements QueryCondition {
 	private String tableName;
 	private String columnName;
 	private NoQueryConditionOperator operator;
@@ -20,46 +20,57 @@ public class NoQueryCondition {
 	public NoQueryCondition() {
 	}
 
+	@Override
 	public String getTableName() {
 		return tableName;
 	}
 
+	@Override
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
 
+	@Override
 	public String getColumnName() {
 		return columnName;
 	}
 
+	@Override
 	public void setColumnName(String columnName) {
 		this.columnName = columnName;
 	}
 
+	@Override
 	public NoQueryConditionOperator getOperator() {
 		return operator;
 	}
 
+	@Override
 	public void setOperator(NoQueryConditionOperator operator) {
 		this.operator = operator;
 	}
 
+	@Override
 	public Object getValue() {
 		return value;
 	}
 
+	@Override
 	public void setValue(Object value) {
 		this.value = value;
 	}
 
+	@Override
 	public NoQueryConditionChain getChain() {
 		return chain;
 	}
 
+	@Override
 	public void setChain(NoQueryConditionChain chain) {
 		this.chain = chain;
 	}
 
+	@Override
 	public Bson getBson() {
 		return this.operator.getClause(this.columnName, this.value);
 	}
